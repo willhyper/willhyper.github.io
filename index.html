@@ -1,21 +1,134 @@
 <html>
-<head>
-    
-    <script type="text/javascript" src="https://platform.linkedin.com/badges/js/profile.js" async defer></script>
 
-    
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="d3.layout.cloud.js"></script>
+<script type="text/javascript" src="https://platform.linkedin.com/badges/js/profile.js" async defer></script>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<head>
+    <title>Chao-Wei Chen</title>
 </head>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: "Lucida Grande", "Droid Sans", Arial, Helvetica, sans-serif;
+    }
+
+    .bld {
+        font-weight: bold;
+    }
+
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+
+    }
+
+    .column {
+        float: left;
+        width: 50%;
+
+    }
+</style>
 
 <body>
 
-<div class="LI-profile-badge"  data-version="v1" data-size="medium" data-locale="en_US" data-type="vertical" data-theme="dark" data-vanity="chao-wei-chen-03179465">
-    <a class="LI-simple-link" href='https://www.linkedin.com/in/chao-wei-chen-03179465?trk=profile-badge'>Chao-Wei Chen</a>
-</div>
+    <div class="row">
+        <div class="column" align="right">
+            <wordcloud>
+        </div>
+        <div class="column" align="left">
+            <div class="LI-profile-badge" data-version="v1" data-size="medium" data-locale="en_US" data-type="vertical"
+                data-theme="light" data-vanity="chao-wei-chen-03179465">
+                <a class="LI-simple-link"
+                    href='https://www.linkedin.com/in/chao-wei-chen-03179465?trk=profile-badge'>Chao-Wei Chen</a>
+            </div>
+        </div>
+    </div>
 
 
-<blockquote class="twitter-tweet"><p lang="en" dir="ltr">a satisfying experiment when journeying reduce: sending operation to alter sequence, using the reduce contract. <br>(defn seq-op [s op] (conj s (op s)))<br>(defn fib-op [s](+ (first s) (second s)))<br>(reduce seq-op &#39;(1 1) (repeat 5 fib-op)); (13 8 5 3 2 1 1)</p>&mdash; chaowei (@willhyper) <a href="https://twitter.com/willhyper/status/1282081156498776065?ref_src=twsrc%5Etfw">July 11, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-<blockquote class="twitter-tweet"><p lang="en" dir="ltr">“Either write something worth reading or do something worth writing.” - Benjamin Franklin. I’ve been running this study group with Chao-Wei Chen for the past 2 years and would love to share what I’ve learned. Please help me to share this if you like it. <a href="https://t.co/nlBTxpjj7N">https://t.co/nlBTxpjj7N</a></p>&mdash; Daw-Ran Liou (@dawranliou) <a href="https://twitter.com/dawranliou/status/988840234266738688?ref_src=twsrc%5Etfw">April 24, 2018</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <div class="row">
+        <div class="column" align="right">
+            <blockquote class="twitter-tweet">
+                <p lang="en" dir="ltr">“Either write something worth reading or do something worth writing.” - Benjamin
+                    Franklin. I’ve been running this study group with Chao-Wei Chen for the past 2 years and would love
+                    to share what I’ve learned. Please help me to share this if you like it. <a
+                        href="https://t.co/nlBTxpjj7N">https://t.co/nlBTxpjj7N</a></p>&mdash; Daw-Ran Liou (@dawranliou)
+                <a href="https://twitter.com/dawranliou/status/988840234266738688?ref_src=twsrc%5Etfw">April 24,
+                    2018</a>
+            </blockquote>
+
+        </div>
+        <div class="column" align="left">
+            <blockquote class="twitter-tweet">
+                <p lang="en" dir="ltr">a satisfying experiment when journeying reduce: sending operation to alter
+                    sequence, using the reduce contract. <br>(defn seq-op [s op] (conj s (op s)))<br>(defn fib-op [s](+
+                    (first s) (second s)))<br>(reduce seq-op &#39;(1 1) (repeat 5 fib-op)); (13 8 5 3 2 1 1)</p>&mdash;
+                chaowei (@willhyper) <a
+                    href="https://twitter.com/willhyper/status/1282081156498776065?ref_src=twsrc%5Etfw">July 11,
+                    2020</a>
+            </blockquote>
+
+        </div>
+    </div>
+
 
 </body>
+
+<script>
+
+    var frequency_list = [
+        { "text": "Python", "size": 60 },
+        { "text": "Clojure", "size": 35 },
+        { "text": "depth-resolved microscopes", "size": 20 },
+        { "text": "optical coherence tomography", "size": 20 },
+        { "text": "electro-physics", "size": 30 },
+        { "text": "semiconductor", "size": 35 },
+        { "text": "laser", "size": 20 },
+        { "text": "optimization (mathematics)", "size": 25 },
+        { "text": "clean code advocate", "size": 35 },
+        { "text": "Java", "size": 45 },
+        { "text": "C#", "size": 45 },
+        { "text": "REST", "size": 35 },
+    ];
+
+
+    var color = d3.scale.linear()
+        .domain([0, 1, 2, 3, 4, 5, 6, 10, 15, 20, 100])
+        .range(["#ddd", "#ccc", "#bbb", "#aaa", "#999", "#888", "#777", "#666", "#555", "#444", "#333", "#222"]);
+
+    d3.layout.cloud().size([600, 300])
+        .words(frequency_list)
+        .rotate(0)
+        .fontSize(function (d) { return d.size; })
+        .on("end", draw)
+        .start();
+
+    function draw(words) {
+        d3.select("wordcloud").append("svg")
+            .attr("width", 850)
+            .attr("height", 350)
+            .attr("class", "wordcloud")
+            .append("g")
+            // without the transform, words words would get cutoff to the left and top, they would
+            // appear outside of the SVG area
+            .attr("transform", "translate(320,200)")
+            .selectAll("text")
+            .data(words)
+            .enter().append("text")
+            .style("font-size", function (d) { return d.size + "px"; })
+            .style("fill", function (d, i) { return color(i); })
+            .attr("transform", function (d) {
+                return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+            })
+            .text(function (d) { return d.text; });
+    }
+</script>
+
 
 </html>
